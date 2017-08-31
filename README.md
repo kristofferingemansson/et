@@ -10,7 +10,7 @@ Adding custom per-package "domain" errors on top of actual errors will allow eas
 ## Usage example
 ```
 import (
-	"https://github.com/kristofferingemansson/et"
+	"https://github.com/kristofferingemansson/go-error-trace/et"
 	"errors"
 	"fmt"
 )
@@ -77,6 +77,8 @@ frames := runtime.CallersFrames(et.Trace(err))
 ```
 
 # Bonus!
-Compatibility with github.com/pkg/errors:
-If you have a package which uses above errors package, the stack trace of an error will be transferred when using et.New(/*..., */ err)
+Compatibility with `github.com/pkg/errors:`
+
+If you have a package which uses above errors package, the stack trace of an error will be transferred when using `et.New(/*..., */ err)`
+
 
