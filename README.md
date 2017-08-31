@@ -47,6 +47,57 @@ func DoStuff() error {
 }
 ```
 
+## Nesting
+A major point with this package is to wrap(wrap(wrap(your errors))) so that you each time add per-package "domain" errors that easily can be switched on.
+```
+
+func main() {
+	if err := y.Y(); err != nil {
+		switch et.Last(err) {
+		case y.ErrYa:
+			// Ignore this error
+		case y.ErrYb:
+			// Print full stack trace
+			fmt.Printf("%+v", et.Trace(err))
+		}
+	}
+}
+
+// PackageY
+var (
+	ErrYa = errors.New("ErrYa")
+	ErrYb = errors.New("ErrYb")
+)
+
+func Y() error {
+	if err := x.X(); err != nil {
+		switch et.Last(err) {
+		case x.ErrXa, x.ErrXb:
+			return et.New(ErrYa, errors.New("This is bad!"), err)
+		default:
+			return et.New(ErrYb, errors.New("Unhandled error"), err)
+		}
+	}
+	return nil
+}
+
+
+// PackageX
+var (
+	ErrXa = errors.New("ErrXa")
+	ErrXb = errors.New("ErrXb")
+)
+func Y() error {
+	if err := ???; err != nil {
+		return et.New(ErrXa, errors.New("This and that happened"), err)
+	}
+	if err := ???; err != nil {
+		return et.New(ErrXb, errors.New("Oh noes!"), err)
+	}
+	retur nil
+}
+```
+
 ## Error stack
 ### Printing
 ```
