@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	ErrorA = errors.New("ErrorA")
-	ErrorB = errors.New("ErrorB")
+	ErrorA = errors.New("Domain error 1")
+	ErrorB = errors.New("Domain error 2")
 )
 
 func TestError(t *testing.T) {
@@ -18,6 +18,7 @@ func TestError(t *testing.T) {
 		if err != nil {
 			return New(
 				ErrorA,
+				errors.New("Description of why everyting went wrong"),
 				err,
 			)
 		}
