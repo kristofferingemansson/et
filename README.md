@@ -8,6 +8,7 @@ Nested wrapping will only push new errors on top of the error stack. This will a
 Adding custom per-package "domain" errors on top of actual errors will allow easy error handling in consuming packages.
 
 ## Usage example
+
 ```
 import (
 	"https://github.com/kristofferingemansson/go-error-trace/et"
@@ -48,7 +49,9 @@ func DoStuff() error {
 ```
 
 ## Nesting
-A major point with this package is to wrap(wrap(wrap(your errors))) so that you each time add per-package "domain" errors that easily can be switched on.
+
+A major deal with this package is to wrap(wrap(wrap(your errors))) so that you each time add per-package "domain" errors that can easily be switched on.
+
 ```
 
 func main() {
@@ -73,7 +76,7 @@ func Y() error {
 	if err := x.X(); err != nil {
 		switch et.Last(err) {
 		case x.ErrXa, x.ErrXb:
-			return et.New(ErrYa, errors.New("This is bad!"), err)
+			return et.New(ErrYa, err)
 		default:
 			return et.New(ErrYb, errors.New("Unhandled error"), err)
 		}
@@ -89,7 +92,7 @@ var (
 )
 func Y() error {
 	if err := ???; err != nil {
-		return et.New(ErrXa, errors.New("This and that happened"), err)
+		return et.New(ErrXa, err)
 	}
 	if err := ???; err != nil {
 		return et.New(ErrXb, errors.New("Oh noes!"), err)
