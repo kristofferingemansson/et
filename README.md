@@ -90,7 +90,7 @@ var (
 	ErrXa = errors.New("ErrXa")
 	ErrXb = errors.New("ErrXb")
 )
-func Y() error {
+func X() error {
 	if err := ???; err != nil {
 		return et.New(ErrXa, err)
 	}
