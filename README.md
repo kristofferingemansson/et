@@ -11,7 +11,7 @@ Adding custom per-package "domain" errors on top of actual errors will allow eas
 
 ```
 import (
-	"https://github.com/kristofferingemansson/go-error-trace/et"
+	"github.com/kristofferingemansson/go-error-trace/et"
 	"errors"
 	"fmt"
 )
