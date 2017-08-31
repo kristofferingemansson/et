@@ -1,7 +1,5 @@
 package et
 
-import "runtime"
-
 type er struct {
 	trail ErrorTrail
 	trace trace
@@ -31,12 +29,9 @@ func New(errors ...error) error {
 		return last
 	}
 
-	traceBuf := make(trace, 32)
-	n := runtime.Callers(2, traceBuf)
-
 	return &er{
 		trail: errors,
-		trace: traceBuf[0:n],
+		trace: newTrace(last),
 	}
 }
 

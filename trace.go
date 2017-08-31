@@ -2,6 +2,7 @@ package et
 
 import (
 	"fmt"
+	"github.com/pkg/errors"
 	"runtime"
 )
 
@@ -33,4 +34,24 @@ func traceToStackTrace(t trace) StackTrace {
 		}
 	}
 	return ret
+}
+
+func newTrace(err error) trace {
+	type stackTracer interface {
+		StackTrace() errors.StackTrace
+	}
+
+	// Compatibility with github.com/pkg/errors
+	if st, ok := err.(stackTracer); ok {
+		tr := st.StackTrace()
+		ret := make(trace, len(tr))
+		for i, f := range tr {
+			ret[i] = uintptr(f)
+		}
+		return ret
+	}
+
+	traceBuf := make(trace, 32)
+	n := runtime.Callers(3, traceBuf)
+	return traceBuf[0:n]
 }
