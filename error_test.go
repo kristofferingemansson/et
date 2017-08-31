@@ -26,8 +26,15 @@ func TestError(t *testing.T) {
 
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println("-------")
 		fmt.Println(Trail(err))
+		fmt.Println("-------")
+		fmt.Printf("%+v\n", Trail(err))
+		fmt.Println("-------")
 		fmt.Println(Trace(err))
+		fmt.Println("-------")
+		fmt.Printf("%+v\n", Trace(err))
+		fmt.Println("-------")
 
 		switch Last(err) {
 		case ErrorA:

@@ -6,37 +6,34 @@ import (
 	"runtime"
 )
 
-type trace []uintptr
-
-// StackTrace pretty printable stack trace
-type StackTrace []string
+// StackTrace ..
+type StackTrace []uintptr
 
 // Trace returns stack trace for error
 func Trace(err error) StackTrace {
 	if te, ok := err.(*er); ok {
-		return traceToStackTrace(te.trace)
+		return te.trace
 	}
 
 	return nil
 }
 
-func traceToStackTrace(t trace) StackTrace {
-	ret := make(StackTrace, 0)
+// Format format StackTrace as string
+func (t StackTrace) Format(f fmt.State, c rune) {
+	flag := f.Flag('+')
 	frames := runtime.CallersFrames(t)
+	sep := ""
 	for {
 		frame, more := frames.Next()
-		ret = append(
-			ret,
-			fmt.Sprintf("%v() @ %v:%v", frame.Function, frame.File, frame.Line),
-		)
-		if !more {
+		fmt.Fprintf(f, "%v%v() @ %v:%v", sep, frame.Function, frame.File, frame.Line)
+		if !more || !flag {
 			break
 		}
+		sep = "\n"
 	}
-	return ret
 }
 
-func newTrace(err error) trace {
+func newTrace(err error) StackTrace {
 	type stackTracer interface {
 		StackTrace() errors.StackTrace
 	}
@@ -44,14 +41,14 @@ func newTrace(err error) trace {
 	// Compatibility with github.com/pkg/errors
 	if st, ok := err.(stackTracer); ok {
 		tr := st.StackTrace()
-		ret := make(trace, len(tr))
+		ret := make(StackTrace, len(tr))
 		for i, f := range tr {
 			ret[i] = uintptr(f)
 		}
 		return ret
 	}
 
-	traceBuf := make(trace, 32)
+	traceBuf := make(StackTrace, 32)
 	n := runtime.Callers(3, traceBuf)
 	return traceBuf[0:n]
 }

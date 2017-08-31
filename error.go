@@ -2,7 +2,7 @@ package et
 
 type er struct {
 	trail ErrorTrail
-	trace trace
+	trace StackTrace
 }
 
 func (e *er) Error() string {
