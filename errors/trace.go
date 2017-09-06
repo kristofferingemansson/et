@@ -1,4 +1,4 @@
-package et
+package errors
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ type StackFrames []uintptr
 
 // Frames returns stack frames for usage in other errors / custom stack tracing
 func Frames(err error) StackFrames {
-	if te, ok := err.(*errorWrapper); ok {
+	if te, ok := err.(*wrapper); ok {
 		return te.trace
 	}
 	return nil
@@ -22,7 +22,7 @@ type StackTrace []string
 
 // Trace returns stack trace for error
 func Trace(err error) StackTrace {
-	if te, ok := err.(*errorWrapper); ok {
+	if te, ok := err.(*wrapper); ok {
 		return stackFramesToStackTrace(te.trace)
 	}
 	return nil

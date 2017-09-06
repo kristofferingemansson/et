@@ -1,11 +1,11 @@
-package et
+package errors
 
-type errorWrapper struct {
+type wrapper struct {
 	trail ErrorTrail
 	trace StackFrames
 }
 
-func (e *errorWrapper) Error() string {
+func (e *wrapper) Error() string {
 	if len(e.trail) > 0 {
 		return e.trail[0].Error()
 	}
@@ -21,7 +21,7 @@ func New(errors ...error) error {
 	}
 
 	last := errors[l-1]
-	if te, ok := last.(*errorWrapper); ok {
+	if te, ok := last.(*wrapper); ok {
 		if l == 1 {
 			return last
 		}
@@ -29,7 +29,7 @@ func New(errors ...error) error {
 		return last
 	}
 
-	return &errorWrapper{
+	return &wrapper{
 		trail: errors,
 		trace: newTrace(last),
 	}
@@ -40,7 +40,7 @@ func Last(err error) error {
 	if err == nil {
 		return nil
 	}
-	if te, ok := err.(*errorWrapper); ok {
+	if te, ok := err.(*wrapper); ok {
 		return te.trail[0]
 	}
 	return err
@@ -51,7 +51,7 @@ func First(err error) error {
 	if err == nil {
 		return nil
 	}
-	if te, ok := err.(*errorWrapper); ok {
+	if te, ok := err.(*wrapper); ok {
 		return te.trail[len(te.trail)-1]
 	}
 	return err

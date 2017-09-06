@@ -1,4 +1,4 @@
-package et
+package errors
 
 import (
 	"encoding/base64"
