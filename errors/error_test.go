@@ -17,6 +17,7 @@ func TestError(t *testing.T) {
 		_, err := base64.StdEncoding.DecodeString("x")
 		if err != nil {
 			return New(
+				"",
 				ErrorA,
 				errors.New("Description of why everyting went wrong"),
 				err,
